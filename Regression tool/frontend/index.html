@@ -1,0 +1,431 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title> New FrontEnd</title>
+  <!--Importing Plotly cdn fro plots-->
+  <!-- <script src='https://cdn.plot.ly/plotly-2.16.1.min.js'></script>
+  <script src="plotly-2.16.1.min.js"></script> -->
+  <!--Styling Buttons-->
+  <link rel="stylesheet" href="/static/css/index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script src="/static/js/main.js"></script> 
+  
+
+  <script src='https://cdn.plot.ly/plotly-2.16.1.min.js'></script>
+  <!----===== Boxicons CSS ===== -->
+  <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+
+
+  
+  <!--=========<title>Dashboard Sidebar Menu</title>===========--> 
+</head>
+<body>
+    <!-- =========Creating main WINDOW for data starts============-->
+    
+    <section id = "myHome" class="home">
+        <script type="module" src="/static/js/index.js"></script>
+        <div class="openCloseBar" id="myopenCloseBar">
+            <span id ="myhomeOpenIcon" class= "homeOpenIcon" onclick="openHome()" >&#12298;</span>
+            <span id ="myhomeCloseIcon" class= "homeCloseIcon" onclick="closeHome()" >&#12299;</span>
+        </div>
+        <div class="tab" id="myTab"> </div>
+    </section>
+    <!-- =========Creating main WINDOW for data ends============-->
+    <header>
+        <!-- ===========side bar starts==========-->
+          <span class= "sideOpenIcon" id="sideOpenIcon" onclick="openNav()">&#9776;</span>
+           <!-- ========side bar ends===========-->
+
+            <!-- ===========main menu bar(top) starts==========-->
+        </nav>
+        <nav class = "navbar">
+            <div class=" menubar">
+                <ul class="menu-links">
+                    <li class="chart-link" onclick="chartDiv()">
+                        <a href="#myHome" >
+                            <i class='bx bx-bar-chart-alt-2 icon' ></i>
+                            <span class="text nav-text">Charts</span>
+                        </a>
+                    </li>
+                    <li class="stats-link" onclick="statsDiv()">
+                        <a >
+                            <i class='bx bx-file icon' ></i>
+                            <span class="text nav-text">Stats</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+       <!-- =========main menu bar(top) ends============-->
+          
+        <img src="static\images\nexastlogo.png"> <!-- Inserting Logo-->
+        
+    </header>
+    
+<!-- ===========side bar starts==========-->
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+
+        <button type = "button" class = "sideButtons" onclick="reloadAndWarn()"> 
+            <i class='bx bxs-folder-open'></i> Open
+            <input type="file" id="csvFileInput">
+        </button>
+        <button type = "button" class = "sideButtons"> 
+            <i class='bx bx-pie-chart-alt icon' ></i> Log
+        </button>
+        <button type = "button" class = "sideButtons"> 
+            <i class='bx bx-info-circle icon'></i> Help
+        </button>
+        <button type = "button" class = "sideButtons"> 
+            <i class='bx bxs-cog'></i> Settings
+        </button>
+
+    
+    </div>
+    <!-- ========side bar ends===========-->
+    
+    <script type="module" value="Open file" src="/static/js/csvViewer.js"></script> 
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.2.0/papaparse.min.js"></script>
+    <table id="csvRoot"></table>
+    
+
+<script>
+console.log("Page Reloaded") //checking if page reloads when a div is created or closed
+
+
+    // ======open and close side bar menu starts======
+function openNav() {
+  document.getElementById("mySidenav").style.width = "18vw";
+}
+
+function closeNav() {
+  document.getElementById("mySidenav").style.width = "0";
+}
+
+//close side bar by clicking on option or  outside
+document.onclick = function(e){
+    if(e.target.id != "sideOpenIcon" && e.target.id != "mySidenav" ){
+        document.getElementById("mySidenav").style.width = "0";
+    }
+}
+
+ // ======open and close side menu bar ends======
+
+ // ======open and close Home Window(SECTION) starts======
+ function openHome() {
+  document.getElementById("myHome").style.width = "100vw";
+  document.getElementById("myhomeOpenIcon").style.display = "none";
+  document.getElementById("myhomeCloseIcon").style.display = "block";
+
+}
+
+function closeHome() {
+  document.getElementById("myHome").style.width = "25px";
+  document.getElementById("myhomeCloseIcon").style.display = "none";
+  document.getElementById("myhomeOpenIcon").style.display = "block";
+}
+
+   // ======open and close Home Window(SECTION) ends======
+
+    // ======open and close Chart Menu starts======
+ function openChart(divNumber) {
+  document.getElementById(`mySec${divNumber}`).style.width = "15vw";
+  document.getElementById( `mychartCloseIcon${divNumber}`).style.display = "block";
+  document.getElementById(`mychartOpenIcon${divNumber}`).style.display = "none";
+  document.getElementById(`myChartMenu${divNumber}`).style.display = "block";
+  document.getElementById(`myplotly-div${divNumber}`).style.width= "70vw"
+  document.getElementById(`mydecriptive-div${divNumber}`).style.width= "70vw"
+  
+}
+
+function closeChart(divNumber) {
+  document.getElementById(`mySec${divNumber}`).style.width = "20px";
+  document.getElementById(`mychartOpenIcon${divNumber}`).style.display = "block";
+  document.getElementById(`mychartCloseIcon${divNumber}`).style.display = "none";
+  document.getElementById(`myChartMenu${divNumber}`).style.display = "none";
+  document.getElementById(`myplotly-div${divNumber}`).style.width= "84vw"
+  document.getElementById(`mydecriptive-div${divNumber}`).style.width= "84vw"
+}
+
+
+   // ======open and close Chart Menu ends======
+
+
+
+// =======Creating New DIVs on Clicks From Menu Bar "Charts" and "Stats" starts===============
+
+var myChartDivCalls = 0;
+var myStatsDivCalls = 0;
+
+var ChartDivNumberActive;
+var StatsDivNumberActive;
+
+
+
+
+async function reloadAndWarn(){
+
+   alert("page would be reloaded; All progress would be lost")
+    
+}
+
+async function checkforFile(){
+    var file = document.getElementById("csvFileInput");
+    var filePresent;
+    if(file.files.length == 0 ){
+           filePresent = false;
+    } else {
+          filePresent = true
+    } 
+    return filePresent
+
+}
+
+async function chartDiv(){
+    file = await checkforFile()
+    if(file == true ){
+        myChartDivCalls++;
+        let msg1 = `This is chart div ${myChartDivCalls}----------------------------`;
+        var divType = `chartDiv${myChartDivCalls}`;
+        var btnId = `mydestroyDivbtn${myChartDivCalls}`;
+        let clickAttribute = `destroyChartDiv(${myChartDivCalls})` ;
+        let tabId = `myChartTab${myChartDivCalls}`
+        let tabClick = `openDiv(event,${myChartDivCalls},0)` ;
+        ChartDivNumberActive = myChartDivCalls;
+        console.log( "Charts Function has been called " + myChartDivCalls + " times to create new chart DIV " + myChartDivCalls);
+        createDiv(divType, msg1, btnId,  clickAttribute, tabId, tabClick)
+    } else {
+          alert("No file selected")
+    }
+}
+
+async function statsDiv(){
+    myStatsDivCalls++;
+    let msg1 = `This is stats div ${myStatsDivCalls}----------------------------`;
+    var divType = `statsDiv${myStatsDivCalls}`;
+    var btnId = `mydestroyDivbtn${myStatsDivCalls}`;
+    let clickAttribute = `destroyStatsDiv(${myStatsDivCalls})` ;
+    let tabId = `myStatsTab${myStatsDivCalls}`
+    let tabClick = `openDiv(event,${myStatsDivCalls},1)` ;
+    StatsDivNumberActive = myStatsDivCalls;
+    console.log( "Stats Function has been called " + myStatsDivCalls + " times to create new stats DIV " + myStatsDivCalls);
+    createDiv(divType, msg1, btnId,  clickAttribute, tabId, tabClick)
+
+}
+
+async function createDiv(divType, divMessage, btnId,  clickAttribute, tabId, tabClick) {
+    document.getElementById("myHome").style.display = "block";
+    
+    var homeDiv;
+    
+    function setAttributes(el, attrs) {
+        for(var key in attrs) {
+            el.setAttribute(key, attrs[key]);
+        }
+        }
+
+    async function insertSectionInDom(){
+        await createItemsInDiv()
+        // document.body.appendChild(homeSection);
+        document.getElementById("myHome").appendChild(homeDiv);
+        openHome()
+    
+
+    }
+
+    async function createItemsInDiv(){
+        homeDiv = document.createElement('div');
+        const TabRef =  document.createElement('a');
+        var destroyDivbtn = document.createElement('a'); //remove destroy button after completion
+        var tabButton = document.createElement('button');
+        const btnContent = document.createTextNode("X");
+        const divContent = document.createTextNode(divMessage);
+        const tabButtonName = document.createTextNode(tabId);  //Change Name to General After Completion
+
+        
+
+        setAttributes(homeDiv, {
+        "id": divType,
+        "class": "tabcontent",
+        
+        });
+
+        setAttributes( TabRef, {
+            // "href" : `#${divType}`, 
+            "class": "tabRef",
+            "id": "myTabRef",
+            });
+
+        setAttributes(destroyDivbtn, {
+            "href": "javascript:void(0)", 
+            "class": "destroyHomebtn",
+            "id": btnId,
+            "onclick": clickAttribute
+            });
+
+        setAttributes(tabButton, {
+        "class": "tablinks",
+        "id": tabId,
+        "onclick": tabClick,
+        });
+
+
+      
+        destroyDivbtn.appendChild(btnContent)
+        tabButton.appendChild(tabButtonName)
+        tabButton.appendChild(TabRef)
+        
+        document.getElementById("myTab").appendChild(tabButton)
+       
+
+        
+        homeDiv.appendChild(divContent)
+        homeDiv.appendChild(destroyDivbtn)
+        
+     
+    }
+
+    console.log(`${divType} ADDED TO SECTION`, ChartDivNumberActive )
+    return insertSectionInDom()
+
+ 
+}
+
+// ======Creating New DIVs on Clicks From Menu Bar "Charts" and "Stats" ends========
+
+// ======Switching DIV Tabs On click from the main section starts======
+
+function openDiv(event,divNumber, divCode) {
+  // Declare all variables
+  var i, tabcontent, tablinks,  content;
+
+  // Get all elements with class="tabcontent" and hide them
+  tabcontent = document.getElementsByClassName("tabcontent");
+  for (i = 0; i < tabcontent.length; i++) {
+    tabcontent[i].style.display = "none";
+  }
+  content = document.getElementsByClassName("content-div");
+  for (i = 0; i < content.length; i++) {
+    content[i].style.display = "block";
+  }
+
+  // Get all elements with class="tablinks" and remove the class "active"
+  tablinks = document.getElementsByClassName("tablinks");
+  for (i = 0; i < tablinks.length; i++) {
+    tablinks[i].className = tablinks[i].className.replace(" active", "");
+  }
+
+  // Show the current tab, and add an "active" class to the link that opened the tab
+  if(divCode == 0 ){
+    document.getElementById(`chartDiv${divNumber}`).style.display = "block";
+    event.currentTarget.className += " active";
+  }else if(divCode == 1){
+    document.getElementById(`statsDiv${divNumber}`).style.display = "block";
+    event.currentTarget.className += " active";
+  }else{
+    console.log("Error " , divNumber)
+  }
+
+ 
+}
+// ======Switching DIV Tabs On click from the main section ends======
+
+
+// ======Switching Tabs On click from the chart section starts======
+
+function switchTab(event,divNumber, divCode) {
+  // Declare all variables
+  var i, content, chartStatTabButton;
+
+  // Get all elements with class="tabcontent" and hide them
+  content = document.getElementsByClassName("content-div");
+  for (i = 0; i < content.length; i++) {
+    content[i].style.display = "none";
+  }
+
+  // Get all elements with class=" chartStatTabButton" and remove the class "active"
+  chartStatTabButton = document.getElementsByClassName("chartStatTabButton");
+  for (i = 0; i < chartStatTabButton.length; i++) {
+    chartStatTabButton[i].className = chartStatTabButton[i].className.replace(" active", "");
+  }
+
+  // Show the current tab, and add an "active" class to the link that opened the tab
+  if(divCode == 0 ){
+    document.getElementById(`myplotly-div${divNumber}`).style.display = "block";
+    event.currentTarget.className += " active";
+  }else if(divCode == 1){
+    document.getElementById(`mydecriptive-div${divNumber}`).style.display = "block";
+    event.currentTarget.className += " active";
+  }else{
+    console.log("Error " , divNumber)
+  }
+
+ 
+}
+// ======Switching Tabs On click from the chart section ends======
+
+
+
+// ======Destroying DIVs On click from the main section starts======
+function destroyStatsDiv(divNumber){
+    var section = document.getElementById("myHome")
+    var statsElem = document.getElementById(`statsDiv${divNumber}`);
+    var statsTab = document.getElementById(`myStatsTab${divNumber}`);
+    let NumberOfElemsInSection = section.children.length
+   
+
+        if (statsElem != null) {
+                statsElem.remove()
+                statsTab.remove()
+                console.log(`statsDiv${divNumber} has been removed`)
+                // console.log( NumberOfElemsInSection)
+
+            if (NumberOfElemsInSection == 4) {
+            section.style.display = "none";
+            console.log("section hidden")
+            } 
+        }
+    
+}
+
+function destroyChartDiv(divNumber) {
+    var section = document.getElementById("myHome")
+    let NumberOfElemsInSection = section.children.length
+    var chartElem = document.getElementById(`chartDiv${divNumber}`);
+    var chartTab = document.getElementById(`myChartTab${divNumber}`);
+        if (chartElem != null ) {
+            chartElem.remove()
+            chartTab.remove()
+            console.log(`chartDiv${divNumber} has been removed`)
+            // console.log( NumberOfElemsInSection)
+
+            if (NumberOfElemsInSection == 4) {
+            section.style.display = "none";
+            console.log("section hidden")
+            } 
+        }
+    }
+
+
+
+//CODE CLEANING FOR THE DESTROY DIV REQUIRED -----------ONE FUNCTION IS TO BE CREATED FROM THE TWO
+
+
+
+
+
+// ======Destroying DIVs On click from the main section ends======
+
+
+
+
+</script>
+
+
+</body>
+</html>
