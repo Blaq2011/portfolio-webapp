@@ -1,0 +1,4 @@
+plotly.js
+Jquerry
+node.js
+express
